@@ -1,5 +1,8 @@
 import os
 import time
+import pynput
+from pynput.keyboard import Key
+
 
 width = 50
 height = 20
@@ -42,10 +45,40 @@ def moveBall():
     if ball_y == height - 1 or ball_y == 1 :
         directionBall_y *= -1
     ball_y += directionBall_y
-    if (rocket1 <= ball_y <= rocket1 + rocketLength and ball_x == 1) \
-            or (rocket2 <= ball_y <= rocket2 + rocketLength and ball_x == width - 1) :
+    if (rocket1 <= ball_y < rocket1 + rocketLength and ball_x == 1) \
+            or (rocket2 <= ball_y < rocket2 + rocketLength and ball_x == width - 1) :
         directionBall_x *= -1
+    elif ball_x <= 0:
+        exit('Player 2 Win!')
+    elif ball_x >= width:
+        exit('Player 1 Win!')
     ball_x += directionBall_x
+
+def on_press(key):
+    global rocket2, rocket1, rocketLength
+    if key == Key.up:
+        if 1 <= rocket2:
+            rocket2 -= 1
+    if key == Key.down:
+        if rocket2 <= height - rocketLength:
+            rocket2 += 1
+    if key == pynput.keyboard.KeyCode.from_char('w'):
+        if 1 <= rocket1:
+            rocket1 -= 1
+    if key == pynput.keyboard.KeyCode.from_char('s'):
+        if rocket1 <= height - rocketLength:
+            rocket1 += 1
+
+
+def on_release(key):
+    pass
+    # print(key)
+
+
+pynput.keyboard.Listener(
+    on_press=on_press,
+    on_release=on_release
+).start()
 
 
 while True:
