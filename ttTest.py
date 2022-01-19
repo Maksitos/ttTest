@@ -36,14 +36,21 @@ def draw():
         print(result)
         height_p += 1
 
-    pass
-
 
 def moveBall():
-    pass
+    global ball_y, ball_x, directionBall_y, directionBall_x
+    if ball_y == height - 1 or ball_y == 1 :
+        directionBall_y *= -1
+    ball_y += directionBall_y
+    if (rocket1 <= ball_y <= rocket1 + rocketLength and ball_x == 1) \
+            or (rocket2 <= ball_y <= rocket2 + rocketLength and ball_x == width - 1) :
+        directionBall_x *= -1
+    ball_x += directionBall_x
+
 
 while True:
     draw()
+    moveBall()
     time.sleep(0.1)
     os.system('cls')
 
